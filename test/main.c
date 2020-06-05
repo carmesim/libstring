@@ -11,5 +11,10 @@ int main(void)
     printf("%s\n", str2->value);
     printf("%zu %zu\n", str2->reserved, str2->size);
 
+    cstr_t * str3 = string_init("testing allocation 1");
+    cstr_t * str4 = string_init("testing allocation 2 2");
+    cstr_t * str5 = string_init("testing allocation 3 3 3");
+    cstr_t * str6 = string_init("testing allocation 4 4 4 4");
+
     string_free_all();
 }

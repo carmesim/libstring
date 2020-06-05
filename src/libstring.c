@@ -27,7 +27,6 @@
 
 #include "libstring.h"
 #include <stdio.h>
-#include <string.h>
 
 /*
  * TODOs
@@ -45,7 +44,8 @@ void * __malloc(size_t size)
     return ptr;
 }
 
-    /* Portable and simple reimplementation of strlen
+    /*
+     * Portable and simple reimplementation of strlen
      * Does not totally conform to the C ISO standard, but is good enough for our uses.
      */
 size_t __strlen(const char *s) {
@@ -54,6 +54,36 @@ size_t __strlen(const char *s) {
     return i;
 }
 
+char * __memcpy(char * dest, const char *src, size_t n) {
+   while (n--)
+   {
+       *dest++ = *src++;
+   }
+   return dest;
+}
+
+void __strcpy(char *dest, const char *src, size_t size)
+{
+    if(!size)
+    {
+        fprintf(stderr, "__strcpy should not be called with size==0\n");
+        return;
+    }
+
+    size_t source_len = __strlen(src);
+    size_t n;
+
+    if (size-1 < source_len)    // Truncate to the size of the smaller string
+    {
+        n = size-1;
+    } else
+    {
+        n = source_len;
+    }
+
+    __memcpy(dest, src, n);      // Copy the contents of src to dest
+    dest[n] = '\0';              // Null-terminate dest.
+}
 
 struct alloc_node
 {
@@ -149,6 +179,6 @@ void string_to_upper_case(cstr_t * origin)
 cstr_t * string_init(const char * origin)
 {
     cstr_t * new = string_alloc(__strlen(origin)+1);
-    strncpy(new->value, origin, __strlen(origin)+1);                   // TODO: change to string_copy
+    __strcpy(new->value, origin, __strlen(origin));                   // TODO: change to string_copy
     return new;
 }
