@@ -1,4 +1,4 @@
-# libstring
+# libstring [![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/carmesim/libstring)](https://www.tickgit.com/browse?repo=github.com/carmesim/libstring) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
   **Early work in progress. ⚠️*
 
