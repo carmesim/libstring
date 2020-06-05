@@ -216,7 +216,7 @@ bool string_reserve(cstr_t *str, size_t capacity)
 
     if (capacity < str->size)
     {
-        // TODO: Implement truncation?
+        //! TODO: Implement truncation?
         fprintf(stderr, "New capacity supplied is smaller than the string's current size.\n");
         return false;
     }
