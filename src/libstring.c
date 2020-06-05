@@ -28,11 +28,6 @@
 #include "libstring.h"
 #include <stdio.h>
 
-/*
- * TODOs
- * invalid write on string_alloc, when writing to alloc_list_head->val->size and alloc_list_head->val->reserved
- */
-
 void * __malloc(size_t size)
 {
     void * ptr = malloc(size);
@@ -85,6 +80,12 @@ void __strcpy(char *dest, const char *src, size_t size)
     dest[n] = '\0';              // Null-terminate dest.
 }
 
+/*!
+ * \struct alloc_node A single node of the allocation linked list.
+ * \param nbytes The number of bytes to be allocated.
+ * \property val  A pointer to struct cstr.
+ * \property next A pointer to the next node in the allocation list.
+ */
 struct alloc_node
 {
     cstr_t            * val;
@@ -140,45 +141,55 @@ void string_free_all (void)
     }
 }
 
-/* VRM: I've changed lower_case and upper_case
-* to no longer return anything.
-*/
 /*!
- * \brief Alters a string to contain only lower case characters.
- * \param origin The cstr_t * to be altered.
+ * \brief Alters a string to contain only lower-case characters.
+ * \param origin The string whose value will be converted to lower-case characters. This parameters does not get modified.
+ * \retval lower A brand new cstr_t * that contains the altered value.
+ * Makes use of bit manipulation to alter the ASCII values.
  */
-void string_to_lower_case(cstr_t * origin)
+cstr_t * string_to_lower_case(cstr_t * origin)
 {
+    cstr_t* lower;
+    lower = string_init(origin->value);
+    __strcpy(lower->value, origin->value, origin->size);
+
     size_t i;
-    for(i=0; i<origin->size; i++)
+    for(i=0; i<lower->size; i++)
     {
-        if ((origin->value[i] >= 'A') && (origin->value[i] <= 'Z'))
+        if ((lower->value[i] >= 'A') && (lower->value[i] <= 'Z'))
         {
-            origin->value[i] |= ' ';
+            lower->value[i] |= ' ';
         }
     }
+    return lower;
 }
 
 /*!
- * \brief Alters a string to contain only lower case characters.
- * \param origin The cstr_t * to be altered.
+ * \brief  Alters a string to contain only lower-case characters.
+ * \param  origin  The string whose value will be converted to upper-case characters. This parameters does not get modified.
+ * \retval upper   A brand new cstr_t * that contains the altered value.
  * Makes use of bit manipulation to alter the ASCII values.
  */
-void string_to_upper_case(cstr_t * origin)
+cstr_t * string_to_upper_case(cstr_t * origin)
 {
+    cstr_t* upper;
+    upper = string_init(origin->value);
+    __strcpy(upper->value, origin->value, origin->size);
+
     size_t i;
-    for(i=0; i<origin->size; i++)
+    for(i=0; i<upper->size; i++)
     {
-        if ((origin->value[i] >= 'a') && (origin->value[i] <= 'z'))
+        if ((upper->value[i] >= 'a') && (upper->value[i] <= 'z'))
         {
-            origin->value[i] &= '_';
+            upper->value[i] &= '_';
         }
     }
+    return upper;
 }
 
 cstr_t * string_init(const char * origin)
 {
     cstr_t * new = string_alloc(__strlen(origin)+1);
-    __strcpy(new->value, origin, __strlen(origin));                   // TODO: change to string_copy
+    __strcpy(new->value, origin, __strlen(origin));
     return new;
 }
