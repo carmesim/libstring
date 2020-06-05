@@ -237,3 +237,42 @@ bool string_reserve(cstr_t *str, size_t capacity)
     str->reserved = capacity;
     return true;
 }
+//!
+//! \brief string_swap Swaps the content of str1 with str2.
+//! \param str1        An initialized cstr_t *.
+//! \param str2        An initialized cstr_t *.
+//! \return A success-run boolean.
+//!
+bool string_swap(cstr_t * str1, cstr_t * str2)
+{
+    if (!str1)
+    {
+        fprintf(stderr, "In string_swap: str1 unitialized.\n");
+        return false;
+    }
+    if (!str2)
+    {
+        fprintf(stderr, "In string_swap: str2 unitialized.\n");
+        return false;
+    }
+
+    size_t str1_val_size   = str1->size;
+    char * str1_val_backup = malloc(str1_val_size + 1);
+    if(!str1_val_backup)
+    {
+        fprintf(stderr, "In string_swap: malloc failed.\n");
+    }
+
+    __strcpy(str1_val_backup, str1->value, str1_val_size);
+    size_t str1_res_backup = str1->reserved;
+    free(str1->value);
+    str1->value    = str2->value;
+    str1->size     = str2->size;
+    str1->reserved = str2->reserved;
+
+    str2->value    = str1_val_backup;
+    str2->size     = str1_val_size;
+    str2->reserved = str1_res_backup;
+
+    return true;
+}

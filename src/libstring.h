@@ -44,34 +44,33 @@ typedef struct cstr cstr_t;
 // Initialization and memory
 cstr_t * string_init(const char * origin);
 /* Attempts to reserve `capacity` bytes onto the string, returns true if possible. */
-bool string_reserve(cstr_t *str, size_t capacity);
-bool string_resize(cstr_t *str, size_t new_size);
-bool string_free(cstr_t * str);
+bool string_reserve(cstr_t *str, size_t capacity);         // def, tested, needs one more test case
+bool string_resize(cstr_t *str, size_t new_size);          // undef
+bool string_free(cstr_t * str);                            // undef
 /* Frees all allocated strings */
-void string_free_all(void);                                // Free all alloc-ed strings
+void string_free_all(void);                                // def, tested, unfinished
 
 // Utility functions
-int string_compare(cstr_t * str1, cstr_t * str2);      // Follows C++ standard
-cstr_t * string_concat(cstr_t * str1, cstr_t * str2);  // returns str1 + str2
-size_t string_concat_to(cstr_t * str1, cstr_t * str2); // str1 = str1 + str2
-bool string_ends_with_x(cstr_t * str, cstr_t * x);
-char string_get_char_at(cstr_t * str, size_t pos);                       // Bound-checking
-size_t string_index_of(cstr_t *str, char c);
-size_t string_last_index_of(cstr_t *str, char c);
-cstr_t * string_left(cstr_t * str, size_t length); // SIM TÔ COPIANDO FUNÇÃO DO QT NA CARA DURA E DAÍ
-cstr_t * string_mid(cstr_t * str, size_t pos, size_t length);
-size_t string_replace_char(cstr_t *str, char before, char after);
-cstr_t * string_reverse(cstr_t * str);
-size_t string_reserved_size();
-cstr_t string_right(cstr_t * str, size_t length);
-bool string_set_char_at(cstr_t * str, size_t pos);                       // Bound-checking
-size_t string_size(cstr_t * str);
-bool string_starts_with_x(cstr_t * str, cstr_t * x);
-bool string_swap(cstr_t * str1, cstr_t * str2);
-int string_to_int(cstr_t * str);
+int string_compare(cstr_t * str1, cstr_t * str2);          // undef, Follows C++ standard
+cstr_t * string_concat(cstr_t * str1, cstr_t * str2);      // undef, returns str1 + str2
+size_t string_concat_to(cstr_t * str1, cstr_t * str2);     // undef, str1 = str1 + str2
+bool string_ends_with_x(cstr_t * str, cstr_t * x);         // undef
+char string_get_char_at(cstr_t * str, size_t pos);         // undef, bound-checking
+size_t string_index_of(cstr_t *str, char c);               // undef
+size_t string_last_index_of(cstr_t *str, char c);          // undef
+cstr_t * string_left(cstr_t * str, size_t length);         // undef
+cstr_t * string_mid(cstr_t * str, size_t pos, size_t length);       // undef
+size_t string_replace_char(cstr_t *str, char before, char after);   // undef
+cstr_t * string_reverse(cstr_t * str);                     // undef
+cstr_t string_right(cstr_t * str, size_t length);          // undef
+bool string_set_char_at(cstr_t * str, size_t pos);         // undef
+size_t string_size(cstr_t * str);                          // undef, TODO: unneeded? size is accessible within the string
+bool string_starts_with_x(cstr_t * str, cstr_t * x);       // undef
+bool string_swap(cstr_t * str1, cstr_t * str2);            // undef
+int string_to_int(cstr_t * str);                           // undef
 
-cstr_t * string_to_lower_case(cstr_t * origin);
-cstr_t * string_to_upper_case(cstr_t * origin);
+cstr_t * string_to_lower_case(cstr_t * origin);            // def, tested
+cstr_t * string_to_upper_case(cstr_t * origin);            // def, tested
 
 /* Implement if possible (not a priority atm) */
 //cstr_t string_tokenize(cstr_t * str, char delim); // Que inferno vai ser isso aqui.
