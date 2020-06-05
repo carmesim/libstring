@@ -23,5 +23,12 @@ int main(void)
     cstr_t * str2low = string_to_upper_case(str2);     //! str1low is a copy of str1 with all lower-case characters.
     printf("After: %s\n", str2low->value);
 
+
+    //! Testing string_resize();
+    if (string_reserve(str1, 2))
+    {
+        printf("string_resized worked with cap=%zu.\n", str1->reserved);
+    }
+
     string_free_all();
 }

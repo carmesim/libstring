@@ -187,9 +187,53 @@ cstr_t * string_to_upper_case(cstr_t * origin)
     return upper;
 }
 
+/*!
+ * \brief  Initializes a new string, a poitner to cstr_t
+ * \param  origin  The char array to be the value of the new string.
+ * \retval upper   A brand new cstr_t *.
+ * Adds to the allocation list.
+ */
 cstr_t * string_init(const char * origin)
 {
     cstr_t * new = string_alloc(__strlen(origin)+1);
     __strcpy(new->value, origin, __strlen(origin));
     return new;
+}
+
+/*!
+ * \brief  Initializes a new string, a poitner to cstr_t
+ * \param  str       The cstr_t * whose capacity will be altered.
+ * \param  capacity  The new memory reserve of the cstr_t *.
+ * \retval bool    Returns true if the operation was succesful, false otherwise.
+ */
+bool string_reserve(cstr_t *str, size_t capacity)
+{
+    if (!str)
+    {
+        fprintf(stderr, "String not initialized.\n");
+        return false;
+    }
+
+    if (capacity < str->size)
+    {
+        // TODO: Implement truncation?
+        fprintf(stderr, "New capacity supplied is smaller than the string's current size.\n");
+        return false;
+    }
+
+    char * val_backup = __malloc(str->size + 1);
+    str->value        = realloc(str->value, capacity);
+    if(!str->value) // realloc failed
+    {
+        //! TODO: needs testing
+        //! I couldn't get realloc to fail in order to test
+        fprintf(stderr, "Reallocation failed with capacity %zu\n", capacity);
+        str->value = val_backup;
+        return false;
+    }
+
+        //! In this case, reallocation worked
+    free (val_backup);      //! Get rid of the backup
+    str->reserved = capacity;
+    return true;
 }
