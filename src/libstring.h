@@ -48,7 +48,7 @@ bool string_reserve(cstr_t *str, size_t capacity);
 bool string_resize(cstr_t *str, size_t new_size);
 bool string_free(cstr_t * str);
 /* Frees all allocated strings */
-void string_free_all();                                // Free all alloc-ed strings
+void string_free_all(void);                                // Free all alloc-ed strings
 
 // Utility functions
 int string_compare(cstr_t * str1, cstr_t * str2);      // Follows C++ standard

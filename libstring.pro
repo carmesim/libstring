@@ -2,4 +2,5 @@ HEADERS += \
     src/libstring.h
 
 SOURCES += \
-    src/libstring.c
+    src/libstring.c \
+    test/main.c
