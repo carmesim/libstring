@@ -149,6 +149,6 @@ void string_to_upper_case(cstr_t * origin)
 cstr_t * string_init(const char * origin)
 {
     cstr_t * new = string_alloc(__strlen(origin)+1);
-    strncpy(new->value, origin, __strlen(origin));                   // TODO: change to string_copy
+    strncpy(new->value, origin, __strlen(origin)+1);                   // TODO: change to string_copy
     return new;
 }
