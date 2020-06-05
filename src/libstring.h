@@ -69,8 +69,8 @@ size_t string_size(cstr_t * str);
 bool string_starts_with_x(cstr_t * str, cstr_t * x);
 bool string_swap(cstr_t * str1, cstr_t * str2);
 int string_to_int(cstr_t * str);
-cstr_t * string_to_lower_case(cstr_t * origin);
-cstr_t * string_to_upper_case(cstr_t * origin);
+void string_to_lower_case(cstr_t * origin);
+void string_to_upper_case(cstr_t * origin);
 
 /* Implement if possible (not a priority atm) */
 //cstr_t string_tokenize(cstr_t * str, char delim); // Que inferno vai ser isso aqui.

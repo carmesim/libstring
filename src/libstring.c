@@ -29,7 +29,12 @@
 #include <stdio.h>
 #include <string.h>
 
-void * _malloc(size_t size)
+/*
+ * TODOs
+ * invalid write on string_alloc, when writing to alloc_list_head->val->size and alloc_list_head->val->reserved
+ */
+
+void * __malloc(size_t size)
 {
     void * ptr = malloc(size);
     if(!ptr)
@@ -39,6 +44,16 @@ void * _malloc(size_t size)
     }
     return ptr;
 }
+
+    /* Portable and simple reimplementation of strlen
+     * Does not totally conform to the C ISO standard, but is good enough for our uses.
+     */
+size_t __strlen(const char *s) {
+    size_t i;
+    for (i = 0; s[i] != '\0'; i++) ;
+    return i;
+}
+
 
 struct alloc_node
 {
@@ -57,9 +72,9 @@ cstr_t * string_alloc (size_t nbytes)
 {
     if (!alloc_list_head)   // If the list's head hasn't been initialized
     {
-        alloc_list_head                = _malloc(sizeof(struct alloc_node));
-        alloc_list_head->val           = _malloc(sizeof(struct cstr *));
-        alloc_list_head->val->value    = _malloc(nbytes * sizeof(char));
+        alloc_list_head                = __malloc(sizeof(struct alloc_node));
+        alloc_list_head->val           = __malloc(sizeof(struct cstr));
+        alloc_list_head->val->value    = __malloc(nbytes * sizeof(char));
         alloc_list_head->val->size     = nbytes;
         alloc_list_head->val->reserved = nbytes;
         alloc_list_head->next          = NULL;
@@ -70,9 +85,9 @@ cstr_t * string_alloc (size_t nbytes)
     while (current->next)
         current = current->next;
 
-    current->next       = _malloc(sizeof(struct alloc_node));
-    current->next->val  = _malloc(sizeof(cstr_t *));
-    current->next->val->value = _malloc(nbytes);
+    current->next       = __malloc(sizeof(struct alloc_node));
+    current->next->val  = __malloc(sizeof(struct cstr));
+    current->next->val->value = __malloc(nbytes);
     current->next->val->size = nbytes;
     current->next->val->reserved = nbytes;
     current->next->next = NULL;
@@ -95,20 +110,31 @@ void string_free_all (void)
     }
 }
 
-    // TODO: do this properly. Makea separate cstr_t and return that.
-cstr_t * string_to_lower_case(cstr_t * origin)
+/* VRM: I've changed lower_case and upper_case
+* to no longer return anything.
+*/
+/*!
+ * \brief Alters a string to contain only lower case characters.
+ * \param origin The cstr_t * to be altered.
+ */
+void string_to_lower_case(cstr_t * origin)
 {
     size_t i;
     for(i=0; i<origin->size; i++)
     {
         if ((origin->value[i] >= 'A') && (origin->value[i] <= 'Z'))
+        {
             origin->value[i] |= ' ';
+        }
     }
-
-    return origin;
 }
 
-cstr_t * string_to_upper_case(cstr_t * origin)
+/*!
+ * \brief Alters a string to contain only lower case characters.
+ * \param origin The cstr_t * to be altered.
+ * Makes use of bit manipulation to alter the ASCII values.
+ */
+void string_to_upper_case(cstr_t * origin)
 {
     size_t i;
     for(i=0; i<origin->size; i++)
@@ -118,14 +144,11 @@ cstr_t * string_to_upper_case(cstr_t * origin)
             origin->value[i] &= '_';
         }
     }
-    return origin;
 }
 
 cstr_t * string_init(const char * origin)
 {
-    cstr_t * new = string_alloc(strlen(origin)+1);  // TODO: change to string_size
-    strcpy(new->value, origin);                   // TODO: change to string_copy
-//    new->size     = strlen(origin)+1;
-//    new->reserved = strlen(origin)+1;
+    cstr_t * new = string_alloc(__strlen(origin)+1);
+    strncpy(new->value, origin, __strlen(origin));                   // TODO: change to string_copy
     return new;
 }
