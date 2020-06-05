@@ -28,11 +28,6 @@
 #include "libstring.h"
 #include <stdio.h>
 
-/*
- * TODOs
- * invalid write on string_alloc, when writing to alloc_list_head->val->size and alloc_list_head->val->reserved
- */
-
 void * __malloc(size_t size)
 {
     void * ptr = malloc(size);
