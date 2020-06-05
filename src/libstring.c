@@ -261,6 +261,7 @@ bool string_swap(cstr_t * str1, cstr_t * str2)
     if(!str1_val_backup)
     {
         fprintf(stderr, "In string_swap: malloc failed.\n");
+        return false;
     }
 
     __strcpy(str1_val_backup, str1->value, str1_val_size);

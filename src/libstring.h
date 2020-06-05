@@ -66,7 +66,7 @@ cstr_t string_right(cstr_t * str, size_t length);          // undef
 bool string_set_char_at(cstr_t * str, size_t pos);         // undef
 size_t string_size(cstr_t * str);                          // undef, TODO: unneeded? size is accessible within the string
 bool string_starts_with_x(cstr_t * str, cstr_t * x);       // undef
-bool string_swap(cstr_t * str1, cstr_t * str2);            // undef
+bool string_swap(cstr_t * str1, cstr_t * str2);            // def, tested
 int string_to_int(cstr_t * str);                           // undef
 
 cstr_t * string_to_lower_case(cstr_t * origin);            // def, tested
