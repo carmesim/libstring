@@ -28,6 +28,11 @@
 #include "libstring.h"
 #include <stdio.h>
 
+//!
+//! \brief __malloc Simple error-printing wrapper around malloc.
+//! \param size     Quantity of memory to be allocated
+//! \return         A pointer to the allocated memory.
+//!
 void * __malloc(size_t size)
 {
     void * ptr = malloc(size);
@@ -40,15 +45,28 @@ void * __malloc(size_t size)
 }
 
     /*
-     * Portable and simple reimplementation of strlen
+     *
      * Does not totally conform to the C ISO standard, but is good enough for our uses.
+     *
      */
+//!
+//! \brief __strlen Portable and simple reimplementation of strlen
+//! \param s        The NUL-terminated char array whose length will be calculated.
+//! \return         The size of the given char array.
+//!
 size_t __strlen(const char *s) {
     size_t i;
     for (i = 0; s[i] != '\0'; i++) ;
     return i;
 }
 
+//!
+//! \brief __memcpy  Simple implementation of memcpy. This implementation is specific to char arrays.
+//! \param dest      The destination char array, whose contents will be written to src.
+//! \param src       The source char array, where the contents of dest will be written to.
+//! \param n         The quantity of elements to be copied.
+//! \return          Returns the destination char array.
+//!
 char * __memcpy(char * dest, const char *src, size_t n) {
    while (n--)
    {
@@ -57,6 +75,12 @@ char * __memcpy(char * dest, const char *src, size_t n) {
    return dest;
 }
 
+//!
+//! \brief __strcpy  A simple string copy function. It will always null-terminate the destination char array.
+//! \param dest      Destination char array.
+//! \param src       Source char array.
+//! \param size      Quantitity of elements to be copied. It may be larger than __strlen(dest), but the function will not write more than __strlen(dest).
+//!
 void __strcpy(char *dest, const char *src, size_t size)
 {
     if(!size)
@@ -92,13 +116,14 @@ struct alloc_node
     struct alloc_node * next;
 };
 
-    /* We'll keep a simple linked list of heap allocations as to allow for string_free_all() */
+//! We keep a simple linked list of heap allocations as to allow for string_free_all()
 struct alloc_node * alloc_list_head = NULL;
 
-/*!
- * \brief Allocates memory for a cstr_t * and adds it to the allocation list.
- * \param nbytes The number of bytes to be allocated.
- */
+//!
+//! \brief string_alloc Allocates memory for a cstr_t * and adds it to the allocation list.
+//! \param nbytes       The number of bytes to be allocated.
+//! \return             Returns a new cstr_t* allocated within the alloc. list.
+//!
 cstr_t * string_alloc (size_t nbytes)
 {
     if (!alloc_list_head)   // If the list's head hasn't been initialized
@@ -125,9 +150,9 @@ cstr_t * string_alloc (size_t nbytes)
     return current->next->val;
 }
 
-/*!
- * \brief Frees all heap memory allocated by libstring.
- */
+//!
+//! \brief string_free_all Frees all heap memory allocated by libstring.
+//!
 void string_free_all (void)
 {
     struct alloc_node * current = alloc_list_head;
@@ -141,12 +166,11 @@ void string_free_all (void)
     }
 }
 
-/*!
- * \brief Alters a string to contain only lower-case characters.
- * \param origin The string whose value will be converted to lower-case characters. This parameters does not get modified.
- * \retval lower A brand new cstr_t * that contains the altered value.
- * Makes use of bit manipulation to alter the ASCII values.
- */
+//!
+//! \brief string_to_lower_case Alters a string to contain only lower-case characters.
+//! \param origin               The string whose value will be converted to lower-case characters. This parameters does not get modified.
+//! \return                     A brand new cstr_t * that contains the altered value.
+//!
 cstr_t * string_to_lower_case(cstr_t * origin)
 {
     cstr_t* lower;
@@ -164,12 +188,12 @@ cstr_t * string_to_lower_case(cstr_t * origin)
     return lower;
 }
 
-/*!
- * \brief  Alters a string to contain only lower-case characters.
- * \param  origin  The string whose value will be converted to upper-case characters. This parameters does not get modified.
- * \retval upper   A brand new cstr_t * that contains the altered value.
- * Makes use of bit manipulation to alter the ASCII values.
- */
+//!
+//! \brief string_to_upper_case Alters a string to contain only upper-case characters.
+//! \param origin               The string whose value will be converted to upper-case characters. This parameters does not get modified.
+//! \return                     A brand new cstr_t * that contains the altered value.
+//! Makes use of bit manipulation to alter the ASCII values.
+//!
 cstr_t * string_to_upper_case(cstr_t * origin)
 {
     cstr_t* upper;

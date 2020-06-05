@@ -22,13 +22,13 @@ int main(void)
     printf("After: %s\n", str2low->value);
     //!
 
-//    //! Testing string_resize(cstr_t*, bool);
-//    printf("Testing string_to_upper_case(cstr_t*, bool);\n");
-//    if (string_reserve(str1, 2))
-//    {
-//        printf("string_resized worked with cap=%zu.\n", str1->reserved);
-//    }
-//    //!
+    //! Testing string_resize(cstr_t*, bool);
+    printf("Testing string_to_upper_case(cstr_t*, bool);\n");
+    if (string_reserve(str1, 50))
+    {
+        printf("string_resized worked with cap=%zu.\n", str1->reserved);
+    }
+    //!
 
     //! Testing string_swap();
     printf("Testing string_swap(cstr_t*, cstr_t*);\n");
