@@ -210,14 +210,14 @@ bool string_reserve(cstr_t *str, size_t capacity)
 {
     if (!str)
     {
-        fprintf(stderr, "String not initialized.\n");
+        fprintf(stderr, "In string_reserve: string not initialized.\n");
         return false;
     }
 
     if (capacity < str->size)
     {
         //! TODO: Implement truncation?
-        fprintf(stderr, "New capacity supplied is smaller than the string's current size.\n");
+        fprintf(stderr, "In string_reserve: new capacity supplied is smaller than the string's current size.\n");
         return false;
     }
 
@@ -227,7 +227,7 @@ bool string_reserve(cstr_t *str, size_t capacity)
     {
         //! TODO: needs testing
         //! I couldn't get realloc to fail in order to test
-        fprintf(stderr, "Reallocation failed with capacity %zu\n", capacity);
+        fprintf(stderr, "In string_reserve: reallocation failed with capacity %zu\n", capacity);
         str->value = val_backup;
         return false;
     }
@@ -237,6 +237,40 @@ bool string_reserve(cstr_t *str, size_t capacity)
     str->reserved = capacity;
     return true;
 }
+
+//!
+//! \brief string_replace_char Replaces all instances of `before` in str to `after`.
+//! \param str                 The cstr_t * to be altered.
+//! \param before              The char to be replaced by `after`.
+//! \param after               The char to replace `before`.
+//! \return                    The quantity of changed characters.
+//!
+//! TODO: should this function return a copy and maintain the original untouched?
+//!
+size_t string_replace_char(cstr_t *str, char before, char after)
+{
+    if(!str)
+    {
+        fprintf(stderr, "In string_replace_char: str is uninitialized.\n");
+        return 0;
+    }
+
+    size_t i, modified = 0;
+
+    size_t str_len = __strlen(str->value);  // TODO: I'm doing this because I think size is sometimes is counting the NUL character. FIXME
+
+    for(i=0; i < str_len; i++)
+    {
+        if(str->value[i] == before)
+        {
+            str->value[i] = after;
+            modified++;
+        }
+    }
+    return modified;
+}
+
+
 //!
 //! \brief string_swap Swaps the content of str1 with str2.
 //! \param str1        An initialized cstr_t *.
@@ -247,7 +281,7 @@ bool string_swap(cstr_t * str1, cstr_t * str2)
 {
     if (!str1)
     {
-        fprintf(stderr, "In string_swap: str1 unitialized.\n");
+        fprintf(stderr, "In string_swap: str1 uninitialized.\n");
         return false;
     }
     if (!str2)

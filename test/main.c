@@ -41,6 +41,10 @@ int main(void)
     }
     //!
 
+    //! Testing string_replace_char(cstr_t *, char, char);
+    string_replace_char(str2, 'T', 'o');
+    printf("After string_replace_char: str2->val = %s.\n", str2->value);
+    //!
 
     string_free_all();
 }

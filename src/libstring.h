@@ -60,7 +60,7 @@ size_t string_index_of(cstr_t *str, char c);               // undef
 size_t string_last_index_of(cstr_t *str, char c);          // undef
 cstr_t * string_left(cstr_t * str, size_t length);         // undef
 cstr_t * string_mid(cstr_t * str, size_t pos, size_t length);       // undef
-size_t string_replace_char(cstr_t *str, char before, char after);   // undef
+size_t string_replace_char(cstr_t *str, char before, char after);   // def, tested, see related to-do inside function.
 cstr_t * string_reverse(cstr_t * str);                     // undef
 cstr_t string_right(cstr_t * str, size_t length);          // undef
 bool string_set_char_at(cstr_t * str, size_t pos);         // undef
