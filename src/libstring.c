@@ -284,12 +284,12 @@ cstr_t * string_init(const char * origin)
 }
 
 //!
-//! \brief string_replace Replaces the value of an cstr_t *. Increases its memory reservation if needed.
+//! \brief string_update  Updates the value of an cstr_t *. Increases its memory reservation if needed.
 //! \param str            The cstr_t * to be modified.
 //! \param new_val        The new char array value.
-//! \return               The new char array size.
+//! \return               The new string's size.
 //!
-size_t string_replace(cstr_t * str, const char * new_val)
+size_t string_update(cstr_t * str, const char * new_val)
 {
     size_t new_string_len = __strlen(new_val);
     if (new_string_len > str->reserved)
@@ -386,8 +386,8 @@ cstr_t * string_concat(cstr_t * str1, const char * str2)
             return new;
         }
     }
-    __strcat(new->value, str2, str2len);
     new->size = str1->size + str2len;
+    __strcat(new->value, str2, new->size);
     return new;
 }
 

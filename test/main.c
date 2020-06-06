@@ -49,9 +49,9 @@ void test_routine(void)
     printf("After string_replace_char: str2->val = %s.\n", str2->value);
     //!
 
-    //! Testing string_contains(cstr_t *, cstr_t *) and string_replace(cstr_t *, const char *);
-    printf("\nTesting string_contains(cstr_t *, cstr_t *) and string_replace(cstr_t *, const char *);\n");
-    string_replace(str1, "carmesim");
+    //! Testing string_contains(cstr_t *, cstr_t *) and string_update(cstr_t *, const char *);
+    printf("\nTesting string_contains(cstr_t *, cstr_t *) and string_update(cstr_t *, const char *);\n");
+    string_update(str1, "carmesim");
     if (string_contains(str1, "armes"))
     {
         printf("%s is in %s\n", "armes", str1->value);
@@ -61,8 +61,9 @@ void test_routine(void)
     printf("\nTesting string_concat(cstr_t *, const char *)\n");
     cstr_t * concat = string_concat(str1, " project");
     printf("str1 + \" project\" = %s\n", concat->value);
-
     //!
+
+    // Freeing all heap-allocated memory
     string_free_all();
 }
 

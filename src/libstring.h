@@ -72,7 +72,7 @@ int string_to_int(cstr_t * str);                           // undef
 cstr_t * string_to_lower_case(cstr_t * origin);            // def, tested
 cstr_t * string_to_upper_case(cstr_t * origin);            // def, tested
 bool string_contains(cstr_t * str1, const char * str2);    // def, tested
-size_t string_replace(cstr_t * str, const char * new_val); // def, tested
+size_t string_update(cstr_t * str, const char * new_val); // def, tested
 
 /* Implement if possible (not a priority atm) */
 //cstr_t string_tokenize(cstr_t * str, char delim); // Que inferno vai ser isso aqui.
