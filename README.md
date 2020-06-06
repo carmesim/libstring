@@ -2,7 +2,7 @@
 
   **Early work in progress. ⚠️*
 
-`libstring` aims to be a highly portable, [Valgrind](https://www.valgrind.org/)-passing, single-header library that brings better support for strings and string manipulation to ANSI C. This library does **not** depend on `string.h` or `strings.h`, using only `stdlin.h`, `stdio.h` and `stdbool.h` (although this one will probably be removed soon).
+`libstring` aims to be a highly portable, [Valgrind](https://www.valgrind.org/)-passing, single-header library that brings better support for strings and string manipulation to ANSI C. This library does **not** depend on `string.h` or `strings.h`, using only `stdio.h`, `stdio.h` and `stdbool.h` (although this one will probably be removed soon).
 
 ## Currently implemented public functions
 
