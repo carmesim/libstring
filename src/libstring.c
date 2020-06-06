@@ -303,7 +303,7 @@ size_t string_replace(cstr_t * str, const char * new_val)
 //! \param str2
 //! \return
 //!
-bool string_contains(cstr_t * str1, cstr_t * str2)
+bool string_contains(cstr_t * str1, const char * str2)
 {
     if (!str1)
     {
@@ -311,19 +311,13 @@ bool string_contains(cstr_t * str1, cstr_t * str2)
         return false;
     }
 
-    if (!str2)
-    {
-        fprintf(stderr, "In string_contains: `str2` unitialized.\n");
-        return false;
-    }
-
-    if (str1->size < str2->size)
+    if (str1->size < __strlen(str2))
     {
         //! str2 is bigger than str1, so it can't be a substring.
         return false;
     }
 
-    if(__strstr(str1->value, str2->value))
+    if(__strstr(str1->value, (char *) str2))
     {
         return true;        // If __strstr returned a non-NULL pointer, str2 is a substring of str1.
     }

@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main(void)
-{    
+{
     cstr_t * str1 = string_init("THE CARMESIM PROJECT.");
     cstr_t * str2 = string_init("The Carmesim Project.");
 
@@ -49,10 +49,9 @@ int main(void)
     //! Testing string_contains(cstr_t *, cstr_t *) and string_replace(cstr_t *, const char *);
     printf("\nTesting string_contains(cstr_t *, cstr_t *) and string_replace(cstr_t *, const char *);\n");
     string_replace(str1, "carmesim");
-    string_replace(str2, "armes");
-    if (string_contains(str1, str2))
+    if (string_contains(str1, "armes"))
     {
-        printf("%s is in %s\n", str2->value, str1->value);
+        printf("%s is in %s\n", "armes", str1->value);
     }
     //!
     string_free_all();
