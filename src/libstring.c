@@ -190,7 +190,7 @@ cstr_t * string_alloc (size_t nbytes)
     {
         alloc_list_head                = __malloc(sizeof(struct alloc_node));
         alloc_list_head->val           = __malloc(sizeof(struct cstr));
-        alloc_list_head->val->value    = __malloc(nbytes * sizeof(char));
+        alloc_list_head->val->value    = __malloc(nbytes + 1);
         alloc_list_head->val->size     = nbytes-1;  //! Remove one from nbytes because it includes the NULL-terminator.
         alloc_list_head->val->reserved = nbytes;
         alloc_list_head->next          = NULL;
@@ -203,8 +203,8 @@ cstr_t * string_alloc (size_t nbytes)
 
     current->next       = __malloc(sizeof(struct alloc_node));
     current->next->val  = __malloc(sizeof(struct cstr));
-    current->next->val->value = __malloc(nbytes);
-    current->next->val->size = nbytes;
+    current->next->val->value = __malloc(nbytes + 1);
+    current->next->val->size = nbytes-1;
     current->next->val->reserved = nbytes;
     current->next->next = NULL;
     return current->next->val;
@@ -271,12 +271,11 @@ cstr_t * string_to_upper_case(cstr_t * origin)
     return upper;
 }
 
-/*!
- * \brief  Initializes a new string, a poitner to cstr_t
- * \param  origin  The char array to be the value of the new string.
- * \retval upper   A brand new cstr_t *.
- * Adds to the allocation list.
- */
+//!
+//! \brief string_init Initializes a new cstr_t *.
+//! \param origin      The char array to be the value of the new string.
+//! \return            A brand new cstr_t *.
+//!
 cstr_t * string_init(const char * origin)
 {
     cstr_t * new = string_alloc(__strlen(origin)+1);
