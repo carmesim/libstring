@@ -28,7 +28,6 @@
 #include "libstring.h"
 #include <stdio.h>
 
-
 //! **** Defining internal functions **** !//
 
 //!
@@ -55,7 +54,7 @@ void * __malloc(size_t size)
 size_t __strlen(const char *s)
 {
     size_t i;
-    for (i = 0; s[i] != '\0'; i++) ;
+    for (i = 0; s[i] != '\0'; i++);
     return i;
 }
 
@@ -129,7 +128,7 @@ char * __memcpy(char * dest, const char *src, size_t n) {
 //! \brief __strcpy  A simple string copy function. It will always null-terminate the destination char array.
 //! \param dest      Destination char array.
 //! \param src       Source char array.
-//! \param size      Quantitity of elements to be copied. It may be larger than __strlen(dest), but the function will not write more than __strlen(dest).
+//! \param size      Quantitity of elements to be copied. It may be larger than __strlen(src), but the function will not write more than __strlen(src).
 //!
 void __strcpy(char *dest, const char *src, size_t size)
 {
@@ -142,9 +141,9 @@ void __strcpy(char *dest, const char *src, size_t size)
     size_t source_len = __strlen(src);
     size_t n;
 
-    if (size-1 < source_len)    // Truncate to the size of the smaller string
+    if (size < source_len)    // Truncate to the size of the smaller string
     {
-        n = size-1;
+        n = size;
     } else
     {
         n = source_len;
@@ -274,6 +273,63 @@ cstr_t * string_init(const char * origin)
     return new;
 }
 
+//!
+//! \brief string_replace Replaces the value of an cstr_t *. Increases its memory reservation if needed.
+//! \param str            The cstr_t * to be modified.
+//! \param new_val        The new char array value.
+//! \return               The new char array size.
+//!
+size_t string_replace(cstr_t * str, const char * new_val)
+{
+    size_t new_string_len = __strlen(new_val);
+    if (new_string_len > str->reserved)
+    {
+        if (!string_reserve(str, new_string_len+1))
+        {
+            fprintf(stderr, "In string_replace: string_reserve(str, %zu) failed.", new_string_len+1);
+            return 0;
+        }
+    }
+
+    __strcpy(str->value, new_val, new_string_len);
+    //printf("strlen: %zu, new_string_len: %zu\n", __strlen(str->value), new_string_len);
+    str->size = new_string_len;
+    return new_string_len;
+}
+
+//!
+//! \brief string_contains
+//! \param str1
+//! \param str2
+//! \return
+//!
+bool string_contains(cstr_t * str1, cstr_t * str2)
+{
+    if (!str1)
+    {
+        fprintf(stderr, "In string_contains: `str1` unitialized.\n");
+        return false;
+    }
+
+    if (!str2)
+    {
+        fprintf(stderr, "In string_contains: `str2` unitialized.\n");
+        return false;
+    }
+
+    if (str1->size < str2->size)
+    {
+        //! str2 is bigger than str1, so it can't be a substring.
+        return false;
+    }
+
+    if(__strstr(str1->value, str2->value))
+    {
+        return true;        // If __strstr returned a non-NULL pointer, str2 is a substring of str1.
+    }
+    return  false;
+}
+
 /*!
  * \brief  Initializes a new string, a poitner to cstr_t
  * \param  str       The cstr_t * whose capacity will be altered.
@@ -297,7 +353,7 @@ bool string_reserve(cstr_t *str, size_t capacity)
 
     char * val_backup = __malloc(str->size + 1);
     str->value        = realloc(str->value, capacity);
-    if(!str->value) // realloc failed
+    if(!str->value)
     {
         //! TODO: needs testing
         //! I couldn't get realloc to fail in order to test

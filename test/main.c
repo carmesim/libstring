@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main(void)
-{
+{    
     cstr_t * str1 = string_init("THE CARMESIM PROJECT.");
     cstr_t * str2 = string_init("The Carmesim Project.");
 
@@ -24,9 +24,9 @@ int main(void)
 
     //! Testing string_resize(cstr_t*, bool);
     printf("Testing string_to_upper_case(cstr_t*, bool);\n");
-    if (string_reserve(str1, 50))
+    if (string_reserve(str1, 55))
     {
-        printf("string_resized worked with cap=%zu.\n", str1->reserved);
+        printf("string_reserve worked with cap=%zu.\n", str1->reserved);
     }
     //!
 
@@ -46,5 +46,14 @@ int main(void)
     printf("After string_replace_char: str2->val = %s.\n", str2->value);
     //!
 
+    //! Testing string_contains(cstr_t *, cstr_t *) and string_replace(cstr_t *, const char *);
+    printf("\nTesting string_contains(cstr_t *, cstr_t *) and string_replace(cstr_t *, const char *);\n");
+    string_replace(str1, "carmesim");
+    string_replace(str2, "armes");
+    if (string_contains(str1, str2))
+    {
+        printf("%s is in %s\n", str2->value, str1->value);
+    }
+    //!
     string_free_all();
 }
