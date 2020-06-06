@@ -28,6 +28,9 @@
 #include "libstring.h"
 #include <stdio.h>
 
+
+//! **** Defining internal functions **** !//
+
 //!
 //! \brief __malloc Simple error-printing wrapper around malloc.
 //! \param size     Quantity of memory to be allocated
@@ -44,20 +47,40 @@ void * __malloc(size_t size)
     return ptr;
 }
 
-    /*
-     *
-     * Does not totally conform to the C ISO standard, but is good enough for our uses.
-     *
-     */
 //!
 //! \brief __strlen Portable and simple reimplementation of strlen
 //! \param s        The NUL-terminated char array whose length will be calculated.
 //! \return         The size of the given char array.
 //!
-size_t __strlen(const char *s) {
+size_t __strlen(const char *s)
+{
     size_t i;
     for (i = 0; s[i] != '\0'; i++) ;
     return i;
+}
+
+//!
+//! \brief __memeq Compares two char arrays and returns true if they're equal on their first `size` elements.
+//! \param str1    First char array
+//! \param str2    Second char array
+//! \param size    Number of elements to be compared
+//! \return        Returns true if both char arrays are equal on their first `size` elements.
+//! In short, __memeq(s1, s2, n) <-> !memcmp(s1, s2, n)
+bool __memeq(char * str1, char * str2, size_t size)
+{
+    if (size)
+    {
+        char *pstr1 = str1, *pstr2 = str2;
+
+        for(; size; --size)
+        {
+            if (*pstr1++ != *pstr2++)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 //!
