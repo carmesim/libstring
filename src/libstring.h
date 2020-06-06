@@ -52,8 +52,8 @@ void string_free_all(void);                                // def, tested, unfin
 
 // Utility functions
 int string_compare(cstr_t * str1, cstr_t * str2);          // undef, Follows C++ standard
-cstr_t * string_concat(cstr_t * str1, cstr_t * str2);      // undef, returns str1 + str2
-size_t string_concat_to(cstr_t * str1, cstr_t * str2);     // undef, str1 = str1 + str2
+cstr_t * string_concat(cstr_t * str1, const char * str2);  // undef, returns str1 + str2
+size_t string_concat_to(cstr_t * str1, const char * str2); // undef, str1 = str1 + str2
 bool string_ends_with_x(cstr_t * str, cstr_t * x);         // undef
 char string_get_char_at(cstr_t * str, size_t pos);         // undef, bound-checking
 size_t string_index_of(cstr_t *str, char c);               // undef

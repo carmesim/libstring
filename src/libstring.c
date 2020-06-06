@@ -130,12 +130,12 @@ char * __memcpy(char * dest, const char *src, size_t n) {
 //! \param src       Source char array.
 //! \param size      Quantitity of elements to be copied. It may be larger than __strlen(src), but the function will not write more than __strlen(src).
 //!
-void __strcpy(char *dest, const char *src, size_t size)
+size_t __strcpy(char *dest, const char *src, size_t size)
 {
     if(!size)
     {
         fprintf(stderr, "__strcpy should not be called with size==0\n");
-        return;
+        return 0;
     }
 
     size_t source_len = __strlen(src);
@@ -151,6 +151,17 @@ void __strcpy(char *dest, const char *src, size_t size)
 
     __memcpy(dest, src, n);      // Copy the contents of src to dest
     dest[n] = '\0';              // Null-terminate dest.
+    return source_len;
+}
+
+size_t __strcat(char *dest, const char *src, size_t size)
+{
+    size_t dest_len = __strlen(dest);
+    if (dest_len < size)
+    {
+        return(dest_len + __strcpy(dest + dest_len, src, size - dest_len));
+    }
+    return(dest_len + __strlen(src));
 }
 
 /*!
@@ -180,7 +191,7 @@ cstr_t * string_alloc (size_t nbytes)
         alloc_list_head                = __malloc(sizeof(struct alloc_node));
         alloc_list_head->val           = __malloc(sizeof(struct cstr));
         alloc_list_head->val->value    = __malloc(nbytes * sizeof(char));
-        alloc_list_head->val->size     = nbytes;
+        alloc_list_head->val->size     = nbytes-1;  //! Remove one from nbytes because it includes the NULL-terminator.
         alloc_list_head->val->reserved = nbytes;
         alloc_list_head->next          = NULL;
         return alloc_list_head->val;
@@ -362,6 +373,25 @@ bool string_reserve(cstr_t *str, size_t capacity)
     return true;
 }
 
+    //! This function is a work-in-progress!
+cstr_t * string_concat(cstr_t * str1, const char * str2)
+{
+    cstr_t * new = string_init(str1->value);
+
+    size_t str2len = __strlen(str2);
+    if(new->reserved < str1->size + str2len)
+    {
+        if(!string_reserve(new, new->size + str2len + 1))
+        {
+            fprintf(stderr, "In string_concat: string_reserve failed.\n");
+            return new;
+        }
+    }
+    __strcat(new->value, str2, str2len);
+    new->size = str1->size + str2len;
+    return new;
+}
+
 //!
 //! \brief string_replace_char Replaces all instances of `before` in str to `after`.
 //! \param str                 The cstr_t * to be altered.
@@ -381,9 +411,7 @@ size_t string_replace_char(cstr_t *str, char before, char after)
 
     size_t i, modified = 0;
 
-    size_t str_len = __strlen(str->value);  // TODO: I'm doing this because I think size is sometimes is counting the NUL character. FIXME
-
-    for(i=0; i < str_len; i++)
+    for(i=0; i < str->size; i++)
     {
         if(str->value[i] == before)
         {

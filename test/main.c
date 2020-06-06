@@ -53,6 +53,12 @@ int main(void)
     {
         printf("%s is in %s\n", "armes", str1->value);
     }
+
+    //! Testing string_concat(cstr_t *, const char *)
+    printf("\nTesting string_concat(cstr_t *, const char *)\n");
+    cstr_t * concat = string_concat(str1, " project");
+    printf("str1 + \" project\" = %s\n", concat->value);
+
     //!
     string_free_all();
 }
