@@ -372,13 +372,50 @@ bool string_reserve(cstr_t *str, size_t capacity)
     return true;
 }
 
-    //! This function is a work-in-progress!
+//!
+//! \brief string_concat_to Concatenates a string str2 to str1.
+//! \param str1
+//! \param str2
+//! \return
+//!
+size_t string_concat_to(cstr_t * str1, const char * str2)
+{
+    if (!str1)
+    {
+        fprintf(stderr, "In string_concat_to: str1 is unitialized.\n");
+        return 0;
+    }
+    size_t str2len = __strlen(str2);
+
+    if(!str2len)
+        return 0;
+
+    if(str1->reserved < str1->size + str2len + 1)
+    {
+        if(!string_reserve(str1, str1->size + str2len + 1))
+        {
+            fprintf(stderr, "In string_concat_to: string_reserve failed.\n");
+            return 0;
+        }
+    }
+
+    str1->size += str2len;
+    __strcat(str1->value, str2, str1->size);
+    return str2len;
+}
+
+//!
+//! \brief string_concat Concatenates str2 to str1 and returns that value into a new cstr_t *.
+//! \param str1
+//! \param str2
+//! \return              A new value containing str1 + str2
+//!
 cstr_t * string_concat(cstr_t * str1, const char * str2)
 {
     cstr_t * new = string_init(str1->value);
 
     size_t str2len = __strlen(str2);
-    if(new->reserved < str1->size + str2len)
+    if(new->reserved < str1->size + str2len + 1)
     {
         if(!string_reserve(new, new->size + str2len + 1))
         {

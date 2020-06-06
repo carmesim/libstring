@@ -60,12 +60,19 @@ void test_routine(void)
     //! Testing string_concat(cstr_t *, const char *)
     printf("\nTesting string_concat(cstr_t *, const char *)\n");
     cstr_t * concat = string_concat(str1, " project");
-    printf("str1 + \" project\" = %s\n", concat->value);
+    printf("\"%s\" + \" project\" = \"%s\"\n", str1->value, concat->value);
+    //!
+
+    //! Testing string_concat_to(cstr_t *, const char *)
+    printf("\nTesting string_concat_to(cstr_t *, const char *)\n");
+    string_concat_to(concat, " 2020.");
+    printf("\"carmesim project\" + \" 2020.\" = \"%s\"\n", concat->value);
     //!
 
     // Freeing all heap-allocated memory
     string_free_all();
 }
+typedef cstr_t * string;
 
 int main(void)
 {
