@@ -84,6 +84,33 @@ bool __memeq(char * str1, char * str2, size_t size)
 }
 
 //!
+//! \brief __strstr Verifies if `find` is a substring within `str`.
+//! \param str      A char array.
+//! \param find     The possible substring within `str`.
+//! \return         Returns NULL if `find` is not a substring of `str`.
+//! This function does *not* verify if __strlen(find) > __strlen(str).
+//!
+char * __strstr(char * str, char *find)
+{
+    char c = *find++;
+    if (c != '\0')
+    {
+        char sc;
+        size_t len =__strlen(find);
+        while(!__memeq(str, find, len))
+        {
+            for(sc = *str++; sc != c; sc = *str++)
+                if (sc == '\0')
+                {
+                    return NULL;
+                }
+        }
+        str--;
+    }
+    return str;
+}
+
+//!
 //! \brief __memcpy  Simple implementation of memcpy. This implementation is specific to char arrays.
 //! \param dest      The destination char array, whose contents will be written to src.
 //! \param src       The source char array, where the contents of dest will be written to.
