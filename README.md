@@ -22,7 +22,17 @@ size_t string_replace_char(cstr_t *str, char before, char after); // Replaces al
 
 The other functions defined in `libstring.c` are internal and not accessible.
 
-## Building
+## Building the test file
+
+### For C99 or up
+
+#### Using qmake
+
+``` qmake && make ```
+
+#### Pure GCC
+
+``` gcc -Wall -Wextra test/main.c src/libstring.c -o libstring-test ```
 
 ### For C89
 
