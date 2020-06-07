@@ -47,6 +47,6 @@ gcc -fpreprocessed -dD -E test/main.c     >> test/89main.c
 cp src/89libstring.c src/libstring.c
 cp src/89libstring.h src/libstring.h
 cp test/89main.c test/main.c
-gcc -std=c89 -Wall -Wextra test/89main.c src/89libstring.c -o libstring-test
+gcc -std=c89 -Wall -Wextra test/main.c src/libstring.c -o libstring-test
 ```
 
