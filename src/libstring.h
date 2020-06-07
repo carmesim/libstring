@@ -27,15 +27,22 @@
 
     /* Type definitions */
 
-#include <stdbool.h>
+#ifndef LIBSTRING_H
+#define LIBSTRING_H
+
 #include <stdlib.h>
+
+#ifdef __STDC_VERSION__
+#   include <stdbool.h>
+#else
+    typedef enum { false, true,} bool;
+#endif
 
 struct cstr
 {
     char * value;
     size_t size;
     size_t reserved;
-    // enum encoding;  libstring 2.0 or more
 };
 
 typedef struct cstr cstr_t;
@@ -75,11 +82,15 @@ cstr_t * string_to_upper_case(cstr_t * origin);            // def, tested
 bool string_contains(cstr_t * str1, const char * str2);    // def, tested
 size_t string_update(cstr_t * str, const char * new_val);  // def, tested
 
+cstr_t * string_first_token(cstr_t * str, char delim);
+
 /* Implement if possible (not a priority atm) */
-//cstr_t string_tokenize(cstr_t * str, char delim); // Que inferno vai ser isso aqui.
+//cstr_t string_tokenize(cstr_t * str, char delim);
 //stol   - Convert string to long int
 //stoul  - Convert string to unsigned integer
 //stoll  - Convert string to long long
 //stoull - Convert string to unsigned long long
 //stof   - Convert string to float
 //stod   - Convert string to double (function template )
+
+#endif

@@ -21,3 +21,22 @@ size_t string_replace_char(cstr_t *str, char before, char after); // Replaces al
 ```
 
 The other functions defined in `libstring.c` are internal and not accessible.
+
+## Building
+
+### For C89
+
+Building for C89 is annoying because GCC with `-std=c89` does not like the C++-style comments.
+
+You can solve this problem by removing all comments and then building:
+
+```bash
+gcc -fpreprocessed -dD -E src/libstring.c >> src/89libstring.c
+gcc -fpreprocessed -dD -E src/libstring.h >> src/89libstring.h
+gcc -fpreprocessed -dD -E test/main.c     >> test/89main.c
+cp src/89libstring.c src/libstring.c
+cp src/89libstring.h src/libstring.h
+cp test/89main.c test/main.c
+gcc -std=c89 -Wall -Wextra test/89main.c src/89libstring.c -o libstring-test
+```
+
