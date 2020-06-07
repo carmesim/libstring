@@ -77,4 +77,13 @@ typedef cstr_t * string;
 int main(void)
 {
     test_routine();
+//    static char * last;
+//    char s[] = "strtok testing -- hopefully reentrant now";
+//    char * token = __strtok(s, " ", &last);
+
+//    while(token)
+//    {
+//        printf("%s\n", token);
+//        token = __strtok(NULL, " ", &last);
+//    }
 }

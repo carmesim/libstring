@@ -116,23 +116,23 @@ char * __strstr(char * str, char *find)
 //! \param str
 //! \param delim
 //! \return
-//! This is based on a version of strtok by Chris Dodd.
-//! TODO: make this function reentrant.
-char * __strtok(char *str, char *delim)
+//! Based on a version of strtok by Chris Dodd.
+//! Update: this should be reentrant/safer now.
+//! Note: this *will* modify `str`. Duplicate the string before usage.
+char * __strtok(char *str, char *delim, char ** prev)
 {
-    static char * prev;
     if (!str)
-        str = prev;
+        str = *prev;
     if (str)
     {
         char *end = __strstr(str, delim);
         if (end)
         {
-            prev = end + __strlen(delim);
+            *prev = end + __strlen(delim);
             *end = 0;
         } else
         {
-            prev = 0;
+            *prev = 0;
         }
     }
     return str;
