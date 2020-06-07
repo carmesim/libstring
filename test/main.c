@@ -26,7 +26,7 @@ void test_routine(void)
     //!
 
     //! Testing string_resize(cstr_t*, bool);
-    printf("\nTesting string_resize(cstr_t*, bool);\n");
+    printf("\nTesting string_reserve(cstr_t*, bool);\n");
     if (string_reserve(str1, 55))
     {
         printf("string_reserve worked with cap=%zu.\n", str1->reserved);

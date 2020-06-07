@@ -96,15 +96,44 @@ char * __strstr(char * str, char *find)
     {
         char sc;
         size_t len =__strlen(find);
-        while(!__memeq(str, find, len))
+        do
         {
             for(sc = *str++; sc != c; sc = *str++)
+            {
                 if (sc == '\0')
                 {
                     return NULL;
                 }
-        }
+            }
+        } while(!__memeq(str, find, len));
         str--;
+    }
+    return str;
+}
+
+//!
+//! \brief __strtok
+//! \param str
+//! \param delim
+//! \return
+//! This is based on a version of strtok by Chris Dodd.
+//! TODO: make this function reentrant.
+char * __strtok(char *str, char *delim)
+{
+    static char * prev;
+    if (!str)
+        str = prev;
+    if (str)
+    {
+        char *end = __strstr(str, delim);
+        if (end)
+        {
+            prev = end + __strlen(delim);
+            *end = 0;
+        } else
+        {
+            prev = 0;
+        }
     }
     return str;
 }
@@ -134,7 +163,7 @@ size_t __strcpy(char *dest, const char *src, size_t size)
 {
     if(!size)
     {
-        fprintf(stderr, "__strcpy should not be called with size==0\n");
+        fprintf(stderr, "In __strcpy: `size` should not be 0.\n");
         return 0;
     }
 
