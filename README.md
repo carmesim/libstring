@@ -36,11 +36,11 @@ The other functions defined in `libstring.c` are internal and not accessible.
 
 ### For C89
 
-Building for C89 is annoying because GCC with `-std=c89` does not like the C++-style comments.
+The only thing deterring builds for C89 are the C++-style comments.
 
 You can solve this problem by removing all comments and then building:
 
-```bash
+```console
 gcc -fpreprocessed -dD -E src/libstring.c >> src/89libstring.c
 gcc -fpreprocessed -dD -E src/libstring.h >> src/89libstring.h
 gcc -fpreprocessed -dD -E test/main.c     >> test/89main.c
