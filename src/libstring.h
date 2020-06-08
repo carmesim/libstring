@@ -82,7 +82,9 @@ cstr_t * string_to_upper_case(cstr_t * origin);            // def, tested
 bool string_contains(cstr_t * str1, const char * str2);    // def, tested
 size_t string_update(cstr_t * str, const char * new_val);  // def, tested
 
-cstr_t * string_first_token(cstr_t * str, char delim);
+
+char * string_first_token(char * str, char * delim);
+char * string_get_token(char * delim);
 
 /* Implement if possible (not a priority atm) */
 //cstr_t string_tokenize(cstr_t * str, char delim);

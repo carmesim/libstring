@@ -69,6 +69,16 @@ void test_routine(void)
     printf("\"carmesim project\" + \" 2020.\" = \"%s\"\n", concat->value);
     //!
 
+    //! Testing string_first_token and string_get_token
+    printf("\nTesting string_first_token and string_get_token\n");
+    char s[] = "strtok testing -- hopefully reentrant now";
+    cstr_t * token = string_init(string_first_token(s, " "));
+    printf("token: %s\n", token->value);
+    while(string_update(token, string_get_token(" ")))
+    {
+        printf("token: %s\n", token->value);
+    }
+
     // Freeing all heap-allocated memory
     string_free_all();
 }
@@ -77,13 +87,5 @@ typedef cstr_t * string;
 int main(void)
 {
     test_routine();
-//    static char * last;
-//    char s[] = "strtok testing -- hopefully reentrant now";
-//    char * token = __strtok(s, " ", &last);
-
-//    while(token)
-//    {
-//        printf("%s\n", token);
-//        token = __strtok(NULL, " ", &last);
-//    }
 }
+

@@ -255,6 +255,22 @@ void string_free_all (void)
     }
 }
 
+char * __strtok_wrapper(char *str, char *delim)
+{
+    static char *last;
+    return __strtok(str, delim, &last);
+}
+
+char * string_first_token(char * str, char * delim)
+{
+    return __strtok_wrapper(str, delim);
+}
+
+char * string_get_token(char * delim)
+{
+    return __strtok_wrapper(NULL, delim);
+}
+
 //!
 //! \brief string_to_lower_case Alters a string to contain only lower-case characters.
 //! \param origin               The string whose value will be converted to lower-case characters. This parameters does not get modified.
@@ -262,8 +278,7 @@ void string_free_all (void)
 //!
 cstr_t * string_to_lower_case(cstr_t * origin)
 {
-    cstr_t* lower;
-    lower = string_init(origin->value);
+    cstr_t* lower = string_init(origin->value);
     __strcpy(lower->value, origin->value, origin->size);
 
     size_t i;
@@ -320,6 +335,10 @@ cstr_t * string_init(const char * origin)
 //!
 size_t string_update(cstr_t * str, const char * new_val)
 {
+    if (!new_val)
+    {
+        return 0;
+    }
     size_t new_string_len = __strlen(new_val);
     if (new_string_len > str->reserved)
     {
