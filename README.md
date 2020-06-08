@@ -9,6 +9,8 @@
 ```C
 cstr_t * string_init(const char * origin);                 // Initializes a new cstr_t *.
 void  string_free_all (void);                              // Frees all heap allocations made by libstring.
+char * string_first_token(char * str, char * delim);       // Sets up tokenization and returns the first token
+char * string_get_token(char * delim);                     // Returns a token from the char * str passed onto the previous function
 cstr_t * string_to_lower_case(cstr_t * origin);            // Returns a new cstr_t * with the contents of origin lower-cased
 cstr_t * string_to_upper_case(cstr_t * origin);            // Returns a new cstr_t * with the contents of origin upper-cased
 cstr_t * string_concat(cstr_t * str1, const char * str2);  // Returns a new cstr_t * with the concatenation of str1 and str2
