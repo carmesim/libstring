@@ -66,7 +66,7 @@ bool string_ends_with_x(cstr_t * str, cstr_t * x);         // undef
 char string_get_char_at(cstr_t * str, size_t pos);         // undef, bound-checking
 size_t string_index_of(cstr_t *str, char c);               // undef
 size_t string_last_index_of(cstr_t *str, char c);          // undef
-cstr_t * string_left(cstr_t * str, size_t length);         // undef
+cstr_t * string_left(cstr_t * str, size_t length);         // def, not tested
 cstr_t * string_mid(cstr_t * str, size_t pos, long length);// def, somewhat tested
 size_t string_replace_char(cstr_t *str, char before, char after);   // def, tested, see related to-do inside function.
 cstr_t * string_reverse(cstr_t * str);                     // undef

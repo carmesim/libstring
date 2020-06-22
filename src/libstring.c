@@ -610,3 +610,14 @@ cstr_t *string_mid(cstr_t *str, size_t pos, long length)
 
     return result;
 }
+
+//!
+//! \brief string_left Returns the first (length) characters of a string starting from the left.
+//! \param str Source string for the substring.
+//! \param length Amount of characters desired.
+//! \return Generated substring
+//!
+cstr_t *string_left(cstr_t *str, size_t length)
+{
+    return string_mid(str, 0, (long) length);
+}

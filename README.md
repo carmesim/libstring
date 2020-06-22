@@ -21,6 +21,7 @@ bool string_swap(cstr_t * str1, cstr_t * str2);            // Swaps the contents
 bool string_reserve(cstr_t *str, size_t capacity);         // Increases str's memory reservation
 size_t string_replace_char(cstr_t *str, char before, char after); // Replaces all instances of a char with another.
 cstr_t * string_mid(cstr_t * str, size_t pos, long length); // Returns a substring of a given string starting at position pos with a given length.
+cstr_t * string_left(cstr_t * str, size_t length); // Returns the first (length) characters of a string starting from the left.
 ```
 
 The other functions defined in `libstring.c` are internal and not accessible.
