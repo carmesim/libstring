@@ -193,6 +193,34 @@ size_t __strcat(char *dest, const char *src, size_t size)
     return(dest_len + __strlen(src));
 }
 
+//!
+//! \brief __cstr_min Quick internal implementation of a min function for size_t.
+//! \param x One of the elements to be compared.
+//! \param y The other element to be compared.
+//! \return The lesser element.
+//!
+size_t __cstr_min(size_t x, size_t y)
+{
+    if (x < y)
+        return x;
+    else
+        return y;
+}
+
+//!
+//! \brief __cstr_max Quick internal implementation of a max function for size_t.
+//! \param x One of the elements to be compared.
+//! \param y The other element to be compared.
+//! \return The greater element.
+//!
+size_t __cstr_max(size_t x, size_t y)
+{
+    if (x > y)
+        return x;
+    else
+        return y;
+}
+
 /*!
  * \struct alloc_node A single node of the allocation linked list.
  * \param nbytes The number of bytes to be allocated.
@@ -385,7 +413,7 @@ bool string_contains(cstr_t * str1, const char * str2)
 }
 
 /*!
- * \brief  Initializes a new string, a poitner to cstr_t
+ * \brief  Initializes a new string, a pointer to cstr_t
  * \param  str       The cstr_t * whose capacity will be altered.
  * \param  capacity  The new memory reserve of the cstr_t *.
  * \retval bool    Returns true if the operation was succesful, false otherwise.
@@ -548,4 +576,37 @@ bool string_swap(cstr_t * str1, cstr_t * str2)
     str2->reserved = str1_res_backup;
 
     return true;
+}
+
+//!
+//! \brief string_mid Returns a substring of a given string starting at position pos with a given length.
+//! \param str Source string for the substring.
+//! \param pos Position of the starting character.
+//! \param length Desired length of the substring. -1 for everything after pos.
+//! \return Generated substring.
+//!
+cstr_t *string_mid(cstr_t *str, size_t pos, long length)
+{
+    if (!str)
+    {
+        fprintf(stderr, "In string_mid: str is uninitialized.\n");
+        return 0;
+    }
+
+    if (str->size <= pos || str->size == 0 || (length < 1 && length != -1))
+        return string_init("");
+
+    size_t stop_element;
+
+    if (length == -1)
+        stop_element = str->size;
+    else
+        stop_element = __cstr_min(str->size, pos + (size_t) length);
+
+    cstr_t *result = string_init("");
+    string_reserve(result, stop_element - pos + 1);
+
+    __strcpy(result->value, &str->value[pos], stop_element - pos);
+
+    return result;
 }
