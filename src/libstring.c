@@ -617,7 +617,18 @@ cstr_t *string_mid(cstr_t *str, size_t pos, long length)
 //! \param length Amount of characters desired.
 //! \return Generated substring
 //!
-cstr_t *string_left(cstr_t *str, size_t length)
+cstr_t *string_left(cstr_t *str, long length)
 {
     return string_mid(str, 0, (long) length);
+}
+
+cstr_t *string_right(cstr_t *str, long length)
+{
+    size_t start_pos;
+    if (length >= str->size)
+        start_pos = 0;
+    else
+        start_pos = str->size - length;
+
+    return string_mid(str, start_pos, -1);
 }
