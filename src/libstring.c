@@ -253,6 +253,8 @@ void string_free_all (void)
         free(temp->val);
         free(temp);
     }
+    current = NULL;
+    alloc_list_head = NULL;
 }
 
 char * __strtok_wrapper(char *str, char *delim)
