@@ -585,7 +585,7 @@ bool string_swap(cstr_t * str1, cstr_t * str2)
 //! \param length Desired length of the substring. -1 for everything after pos.
 //! \return Generated substring.
 //!
-cstr_t *string_mid(cstr_t *str, size_t pos, long length)
+cstr_t * string_mid(cstr_t *str, size_t pos, long length)
 {
     if (!str)
     {
@@ -615,14 +615,20 @@ cstr_t *string_mid(cstr_t *str, size_t pos, long length)
 //! \brief string_left Returns the first (length) characters of a string starting from the left.
 //! \param str Source string for the substring.
 //! \param length Amount of characters desired.
-//! \return Generated substring
+//! \return Generated substring.
 //!
-cstr_t *string_left(cstr_t *str, long length)
+cstr_t * string_left(cstr_t *str, long length)
 {
     return string_mid(str, 0, (long) length);
 }
 
-cstr_t *string_right(cstr_t *str, long length)
+//!
+//! \brief string_left Returns the first (length) characters of a string starting from the right.
+//! \param str Source string for the substring.
+//! \param length Amount of characters desired.
+//! \return Generated substring.
+//!
+cstr_t * string_right(cstr_t *str, long length)
 {
     size_t start_pos;
     if (length >= str->size)

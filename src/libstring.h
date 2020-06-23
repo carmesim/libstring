@@ -70,7 +70,7 @@ cstr_t * string_left(cstr_t * str, long length);         // def, not tested
 cstr_t * string_mid(cstr_t * str, size_t pos, long length);// def, somewhat tested
 size_t string_replace_char(cstr_t *str, char before, char after);   // def, tested, see related to-do inside function.
 cstr_t * string_reverse(cstr_t * str);                     // undef
-cstr_t *string_right(cstr_t * str, long length);          // def, not tested
+cstr_t * string_right(cstr_t * str, long length);          // def, not tested
 bool string_set_char_at(cstr_t * str, size_t pos);         // undef
 size_t string_size(cstr_t * str);                          // undef, TODO: unneeded? size is accessible within the string
 bool string_starts_with_x(cstr_t * str, cstr_t * x);       // undef
