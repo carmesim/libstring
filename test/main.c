@@ -79,6 +79,13 @@ void test_routine(void)
         printf("token: %s\n", token->value);
     }
 
+    //! Testing string_replace
+    printf("\nTesting string_replace\n");
+    cstr_t * apathname = string_init("home/user/path");
+    printf("Before: %s\n", apathname->value);
+    string_replace(apathname, "home/user", "~");
+    printf("After: %s\n", apathname->value);
+
     // Freeing all heap-allocated memory
     string_free_all();
 }

@@ -10,6 +10,7 @@
 cstr_t * string_init(const char * origin);                 // Initializes a new cstr_t *.
 void  string_free_all (void);                              // Frees all heap allocations made by libstring.
 char * string_first_token(char * str, char * delim);       // Sets up tokenization and returns the first token
+void string_replace(cstr_t *str, char * old, const char * new); // Replaces all instances of `old` to `new` within `str`
 char * string_get_token(char * delim);                     // Returns a token from the char * str passed onto the previous function
 cstr_t * string_to_lower_case(cstr_t * origin);            // Returns a new cstr_t * with the contents of origin lower-cased
 cstr_t * string_to_upper_case(cstr_t * origin);            // Returns a new cstr_t * with the contents of origin upper-cased

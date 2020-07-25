@@ -183,7 +183,7 @@ size_t __strcpy(char *dest, const char *src, size_t size)
     return source_len;
 }
 
-size_t __strcat(char *dest, const char *src, size_t size)
+size_t __strncat(char *dest, const char *src, size_t size)
 {
     size_t dest_len = __strlen(dest);
     if (dest_len < size)
@@ -345,6 +345,71 @@ cstr_t * string_to_upper_case(cstr_t * origin)
     return upper;
 }
 
+
+//!
+//! \brief __strset
+//! \param dest
+//! \param ch
+//! \param n
+//! \return
+//!
+void * __strset(char * dest, char ch, size_t n)
+{
+    if (n) {
+        char *d = dest;
+        do {
+            *d++ = ch;
+        } while (--n);
+    }
+    return dest;
+}
+
+char * __strcat(char *dst, const char *src)
+ {
+     char *ret = dst;
+
+     for (; *dst; ++dst);
+     while ((*dst++ = *src++) != '\0');
+     return ret;
+}
+
+// TODO: change to use __strcpy
+char * __strlcpy(char *dst, const char *src)
+{
+    char *save = dst;
+    for (; (*dst = *src) != '\0'; ++src, ++dst);
+    return save;
+}
+
+void string_replace(cstr_t *str, char * old_val, const char * new_val)
+{
+    char * src = str->value;
+    char *p = __strstr(src, old_val);
+    do
+    {
+        if(p)   // If the subold_valing was found
+        {
+            char buf[1024] = {'\0'};
+
+            if(src == p)
+            {
+                __strlcpy(buf,new_val);
+                __strcat(buf,p+__strlen(old_val));
+            }
+            else
+            {
+                __strcpy(buf,src,__strlen(src) - __strlen(p));
+                __strcat(buf,new_val);
+                __strcat(buf,p+__strlen(old_val));
+            }
+
+            __strset(src,'\0', __strlen(src));
+            __strlcpy(src, buf);
+        }
+
+    }while(p && (p = __strstr(src, old_val)));
+}
+
 //!
 //! \brief string_init Initializes a new cstr_t *.
 //! \param origin      The char array to be the value of the new string.
@@ -478,7 +543,7 @@ size_t string_concat_to(cstr_t * str1, const char * str2)
     }
 
     str1->size += str2len;
-    __strcat(str1->value, str2, str1->size);
+    __strncat(str1->value, str2, str1->size);
     return str2len;
 }
 
@@ -502,7 +567,7 @@ cstr_t * string_concat(cstr_t * str1, const char * str2)
         }
     }
     new->size = str1->size + str2len;
-    __strcat(new->value, str2, new->size);
+    __strncat(new->value, str2, new->size);
     return new;
 }
 
@@ -631,7 +696,7 @@ cstr_t * string_left(cstr_t *str, long length)
 cstr_t * string_right(cstr_t *str, long length)
 {
     size_t start_pos;
-    if (length >= str->size)
+    if ((unsigned) length >= str->size)
         start_pos = 0;
     else
         start_pos = str->size - length;
