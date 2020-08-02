@@ -30,17 +30,11 @@ The other functions defined in `libstring.c` are internal and not accessible.
 
 ## Building the test file
 
-### For C99 or up
+The unit tests are done using [Criterion](https://github.com/Snaipe/Criterion).
+Running the `run-tests.sh` file builds the test file and runs it through Valgrind.
 
-#### Using qmake
 
-``` qmake && make ```
-
-#### Pure GCC
-
-``` gcc -Wall -Wextra test/main.c src/libstring.c -o libstring-test ```
-
-### For C89
+## For C89
 
 The only thing deterring builds for C89 are the C++-style comments.
 
@@ -49,10 +43,7 @@ You can solve this problem by removing all comments and then building:
 ```console
 gcc -fpreprocessed -dD -E src/libstring.c >> src/89libstring.c
 gcc -fpreprocessed -dD -E src/libstring.h >> src/89libstring.h
-gcc -fpreprocessed -dD -E test/main.c     >> test/89main.c
-cp src/89libstring.c src/libstring.c
-cp src/89libstring.h src/libstring.h
-cp test/89main.c test/main.c
-gcc -std=c89 -Wall -Wextra test/main.c src/libstring.c -o libstring-test
 ```
+
+You can then use `89libstring.c` and `89libstring.h` on C89 projects.
 
