@@ -1,4 +1,4 @@
 language: C
 compiler: gcc
 os: linux
-script: gcc -Wall -Wextra test/main.c src/libstring.c -o libstring-test
+script: test/run-tests.sh
