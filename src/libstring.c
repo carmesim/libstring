@@ -40,7 +40,7 @@ void * __malloc(size_t size)
     void * ptr = malloc(size);
     if(!ptr)
     {
-        fprintf(stderr, "Fatal error: malloc failed.\n");
+        fprintf(stderr, "Fatal error: malloc failed!\n");
         // TODO: exit?
     }
     return ptr;
@@ -52,7 +52,11 @@ void * __malloc(size_t size)
 //! \return         The size of the given char array.
 //!
 size_t __strlen(const char *s)
-{
+{/*
+    if (s[0] == '\0')
+    {
+        return 0;
+    }*/
     size_t i;
     for (i = 0; s[i] != '\0'; i++);
     return i;
@@ -122,7 +126,9 @@ char * __strstr(char * str, char *find)
 char * __strtok(char *str, char *delim, char ** prev)
 {
     if (!str)
+    {
         str = *prev;
+    }
     if (str)
     {
         char *end = __strstr(str, delim);
@@ -291,6 +297,25 @@ char * __strtok_wrapper(char *str, char *delim)
     return __strtok(str, delim, &last);
 }
 
+bool sanity_check(cstr_t * str)
+{
+    if (!str)
+    {
+        fprintf(stderr, "In sanity_check: the given string is NULL.\n");
+        return false;
+    }
+
+    if (str->size > str->reserved)
+    {
+        //! str->size would only be bigger than str->reserved
+        //! if str is uninitialized
+        fprintf(stderr, "In sanity_check: the given string is probably not initialized.\n");
+        return false;
+    }
+
+    return true;
+}
+
 char * string_first_token(char * str, char * delim)
 {
     return __strtok_wrapper(str, delim);
@@ -308,6 +333,12 @@ char * string_get_token(char * delim)
 //!
 cstr_t * string_to_lower_case(cstr_t * origin)
 {
+    if (!sanity_check(origin))
+    {
+        fprintf(stderr, "In string_to_lower_case: sanity check on `origin` failed.\n");
+        return string_init("");
+    }
+
     cstr_t* lower = string_init(origin->value);
     __strcpy(lower->value, origin->value, origin->size);
 
@@ -330,6 +361,12 @@ cstr_t * string_to_lower_case(cstr_t * origin)
 //!
 cstr_t * string_to_upper_case(cstr_t * origin)
 {
+    if (!sanity_check(origin))
+    {
+        fprintf(stderr, "In string_to_lower_case: sanity check on `origin` failed.\n");
+        return string_init("");
+    }
+
     cstr_t* upper;
     upper = string_init(origin->value);
     __strcpy(upper->value, origin->value, origin->size);
@@ -381,13 +418,21 @@ char * __strlcpy(char *dst, const char *src)
     return save;
 }
 
-void string_replace(cstr_t *str, char * old_val, const char * new_val)
+void string_replace(cstr_t * str, char * old_val, const char * new_val)
 {
+    // TODO: check for overflows here
+
+    if (!sanity_check(str))
+    {
+        fprintf(stderr, "In string_replace: sanity check on `str` failed.\n");
+        return;
+    }
+
     char * src = str->value;
     char *p = __strstr(src, old_val);
     do
     {
-        if(p)   // If the subold_valing was found
+        if(p)   // If the substring was found
         {
             char buf[1024] = {'\0'};
 
@@ -417,6 +462,12 @@ void string_replace(cstr_t *str, char * old_val, const char * new_val)
 //!
 cstr_t * string_init(const char * origin)
 {
+    if (!origin || origin[0] == '\0')
+    {
+        cstr_t * new = string_alloc(1);
+        new->value[0] = '\0';
+        return new;
+    }
     cstr_t * new = string_alloc(__strlen(origin)+1);
     __strcpy(new->value, origin, __strlen(origin));
     return new;
@@ -430,11 +481,17 @@ cstr_t * string_init(const char * origin)
 //!
 size_t string_update(cstr_t * str, const char * new_val)
 {
+    if(!sanity_check(str))
+    {
+        fprintf(stderr, "In string_update: sanity check on `str` failed.\n");
+    }
+
     if (!new_val)
     {
         return 0;
     }
-    size_t new_string_len = __strlen(new_val);
+
+    size_t new_string_len = new_val[0] == '\0' ? 0 : __strlen(new_val);
     if (new_string_len > str->reserved)
     {
         if (!string_reserve(str, new_string_len+1))
@@ -444,8 +501,12 @@ size_t string_update(cstr_t * str, const char * new_val)
         }
     }
 
-    __strcpy(str->value, new_val, new_string_len);
-    //printf("strlen: %zu, new_string_len: %zu\n", __strlen(str->value), new_string_len);
+    if (new_val[0] == '\0')
+    {
+        str->value[0] = '\0';
+    } else {
+        __strcpy(str->value, new_val, new_string_len);
+    }
     str->size = new_string_len;
     return new_string_len;
 }
@@ -458,9 +519,9 @@ size_t string_update(cstr_t * str, const char * new_val)
 //!
 bool string_contains(cstr_t * str1, const char * str2)
 {
-    if (!str1)
+    if (!sanity_check(str1))
     {
-        fprintf(stderr, "In string_contains: `str1` unitialized.\n");
+        fprintf(stderr, "In string_contains: sanity check on `str1` failed.\n");
         return false;
     }
 
@@ -472,8 +533,10 @@ bool string_contains(cstr_t * str1, const char * str2)
 
     if(__strstr(str1->value, (char *) str2))
     {
-        return true;        // If __strstr returned a non-NULL pointer, str2 is a substring of str1.
+        // If __strstr returned a non-NULL pointer, str2 is a substring of str1.
+        return true;
     }
+
     return  false;
 }
 
@@ -485,9 +548,9 @@ bool string_contains(cstr_t * str1, const char * str2)
  */
 bool string_reserve(cstr_t *str, size_t capacity)
 {
-    if (!str)
+    if (!sanity_check(str))
     {
-        fprintf(stderr, "In string_reserve: string not initialized.\n");
+        fprintf(stderr, "In string_reserve: sanity check on `str` failed.\n");
         return false;
     }
 
@@ -517,21 +580,23 @@ bool string_reserve(cstr_t *str, size_t capacity)
 
 //!
 //! \brief string_concat_to Concatenates a string str2 to str1.
-//! \param str1
-//! \param str2
-//! \return
+//! \param str1 The cstr_t * to where str2 will be concatenated to.
+//! \param str2 The string that will be concatenated to str1.
+//! \return The new size of the resulting cstr_t *.
 //!
 size_t string_concat_to(cstr_t * str1, const char * str2)
 {
-    if (!str1)
+    if (!sanity_check(str1))
     {
-        fprintf(stderr, "In string_concat_to: str1 is unitialized.\n");
+        fprintf(stderr, "In string_concat_to: sanity check on `str1` failed.\n");
         return 0;
     }
+
     size_t str2len = __strlen(str2);
 
-    if(!str2len)
+    if(!str2len) {
         return 0;
+    }
 
     if(str1->reserved < str1->size + str2len + 1)
     {
@@ -549,12 +614,17 @@ size_t string_concat_to(cstr_t * str1, const char * str2)
 
 //!
 //! \brief string_concat Concatenates str2 to str1 and returns that value into a new cstr_t *.
-//! \param str1
-//! \param str2
+//! \param str1          The value to where str2 will be concatenated to. The function does not alter str1.
+//! \param str2          The string that will be concatenated to str1.
 //! \return              A new value containing str1 + str2
 //!
 cstr_t * string_concat(cstr_t * str1, const char * str2)
 {
+    if (!sanity_check(str1))
+    {
+        fprintf(stderr, "In string_concat: sanity check on `str1` failed.\n");
+        return 0;
+    }
     cstr_t * new = string_init(str1->value);
 
     size_t str2len = __strlen(str2);
@@ -578,13 +648,13 @@ cstr_t * string_concat(cstr_t * str1, const char * str2)
 //! \param after               The char to replace `before`.
 //! \return                    The quantity of changed characters.
 //!
-//! TODO: should this function return a copy and maintain the original untouched?
+//! TODO: make string_replace_char_to
 //!
 size_t string_replace_char(cstr_t *str, char before, char after)
 {
-    if(!str)
+    if(!sanity_check(str))
     {
-        fprintf(stderr, "In string_replace_char: str is uninitialized.\n");
+        fprintf(stderr, "In string_replace_char: sanity  check on `str` failed.\n");
         return 0;
     }
 
@@ -610,14 +680,14 @@ size_t string_replace_char(cstr_t *str, char before, char after)
 //!
 bool string_swap(cstr_t * str1, cstr_t * str2)
 {
-    if (!str1)
+    if (!sanity_check(str1))
     {
-        fprintf(stderr, "In string_swap: str1 uninitialized.\n");
+        fprintf(stderr, "In string_swap: sanity check on `str1` failed.\n");
         return false;
     }
-    if (!str2)
+    if (!sanity_check(str2))
     {
-        fprintf(stderr, "In string_swap: str2 unitialized.\n");
+        fprintf(stderr, "In string_swap: sanity check on `str2` failed.\n");
         return false;
     }
 
@@ -652,9 +722,9 @@ bool string_swap(cstr_t * str1, cstr_t * str2)
 //!
 cstr_t * string_mid(cstr_t *str, size_t pos, long length)
 {
-    if (!str)
+    if (!sanity_check(str))
     {
-        fprintf(stderr, "In string_mid: str is uninitialized.\n");
+        fprintf(stderr, "In string_mid: sanity check on `str` failed.\n");
         return 0;
     }
 
@@ -668,7 +738,7 @@ cstr_t * string_mid(cstr_t *str, size_t pos, long length)
     else
         stop_element = __cstr_min(str->size, pos + (size_t) length);
 
-    cstr_t *result = string_init("");
+    cstr_t *result = string_init("\0");
     string_reserve(result, stop_element - pos + 1);
 
     __strcpy(result->value, &str->value[pos], stop_element - pos);
@@ -697,9 +767,13 @@ cstr_t * string_right(cstr_t *str, long length)
 {
     size_t start_pos;
     if ((unsigned) length >= str->size)
+    {
         start_pos = 0;
+    }
     else
+    {
         start_pos = str->size - length;
+    }
 
     return string_mid(str, start_pos, -1);
 }

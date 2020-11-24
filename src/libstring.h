@@ -47,41 +47,45 @@ struct cstr
 
 typedef struct cstr cstr_t;
 
+// TODO:
+//bool string_resize(cstr_t *str, size_t new_size);
+//bool string_free(cstr_t * str);
+//bool string_ends_with_x(cstr_t * str, cstr_t * x);
+//char string_get_char_at(cstr_t * str, size_t pos);
+//size_t string_index_of(cstr_t *str, char c);
+//size_t string_last_index_of(cstr_t *str, char c);
+// int string_to_int(cstr_t * str);
+// bool string_set_char_at(cstr_t * str, size_t pos);
+// size_t string_size(cstr_t * str);
+// bool string_starts_with_x(cstr_t * str, cstr_t * x);
+// cstr_t * string_reverse(cstr_t * str);
+// cstr_t * string_reverse_to(cstr_t * str, cstr_t * dest);
+// bool string_is_equal(cstr_t * str1, const char str2);
+
     /***  Function prototypes ***/
 // Initialization and memory
 cstr_t * string_init(const char * origin);
 /* Attempts to reserve `capacity` bytes onto the string, returns true if possible. */
-bool string_reserve(cstr_t *str, size_t capacity);         // def, tested, needs one more test case
-//bool string_resize(cstr_t *str, size_t new_size);          // undef
-//bool string_free(cstr_t * str);                            // undef
+bool string_reserve(cstr_t *str, size_t capacity);
 /* Frees all allocated strings */
-void string_free_all(void);                                // def, tested
+void string_free_all(void);
+
 
 // Utility functions
-int string_compare(cstr_t * str1, cstr_t * str2);          // undef, Follows C++ standard
-// bool string_is_equal(cstr_t * str1, const char str2);      // undef
+int string_compare(cstr_t * str1, cstr_t * str2);
 cstr_t * string_concat(cstr_t * str1, const char * str2);
-size_t string_concat_to(cstr_t * str1, const char * str2); // def, tested
-//bool string_ends_with_x(cstr_t * str, cstr_t * x);         // undef
-//char string_get_char_at(cstr_t * str, size_t pos);
-//size_t string_index_of(cstr_t *str, char c);
-//size_t string_last_index_of(cstr_t *str, char c);
-cstr_t * string_left(cstr_t * str, long length);              // def, not tested
-cstr_t * string_mid(cstr_t * str, size_t pos, long length);   // def, somewhat tested
+size_t string_concat_to(cstr_t * str1, const char * str2);
+cstr_t * string_left(cstr_t * str, long length);
+cstr_t * string_mid(cstr_t * str, size_t pos, long length);
 void string_replace(cstr_t *str, char * old_val, const char * new_val); // TODO: add a return value
 size_t string_replace_char(cstr_t *str, char before, char after);
-// cstr_t * string_reverse(cstr_t * str);                     // undef
-cstr_t * string_right(cstr_t * str, long length);          // def, not tested
-// bool string_set_char_at(cstr_t * str, size_t pos);         // undef
-// size_t string_size(cstr_t * str);                          // undef, TODO: unneeded? size is accessible within the string
-// bool string_starts_with_x(cstr_t * str, cstr_t * x);       // undef
-bool string_swap(cstr_t * str1, cstr_t * str2);            // def, tested
-// int string_to_int(cstr_t * str);                           // undef
+cstr_t * string_right(cstr_t * str, long length);
+bool string_swap(cstr_t * str1, cstr_t * str2);
 
-cstr_t * string_to_lower_case(cstr_t * origin);            // def, tested
-cstr_t * string_to_upper_case(cstr_t * origin);            // def, tested
-bool string_contains(cstr_t * str1, const char * str2);    // def, tested
-size_t string_update(cstr_t * str, const char * new_val);  // def, tested
+cstr_t * string_to_lower_case(cstr_t * origin);
+cstr_t * string_to_upper_case(cstr_t * origin);
+bool string_contains(cstr_t * str1, const char * str2);
+size_t string_update(cstr_t * str, const char * new_val);
 
 
 char * string_first_token(char * str, char * delim);
