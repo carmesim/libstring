@@ -28,6 +28,12 @@
 #include "libstring.h"
 #include <stdio.h>
 
+#ifdef __STDC_VERSION__
+#   define LIBSTRING_INLINE inline
+#else
+#   define LIBSTRING_INLINE
+#endif
+
 //! **** Defining internal functions **** !//
 
 //!
@@ -35,7 +41,7 @@
 //! \param size     Quantity of memory to be allocated
 //! \return         A pointer to the allocated memory.
 //!
-void * __malloc(size_t size)
+static void * __malloc(size_t size)
 {
     void * ptr = malloc(size);
     if(!ptr)
@@ -51,7 +57,7 @@ void * __malloc(size_t size)
 //! \param s        The NUL-terminated char array whose length will be calculated.
 //! \return         The size of the given char array.
 //!
-size_t __strlen(const char *s)
+static size_t __strlen(const char *s)
 {/*
     if (s[0] == '\0')
     {
@@ -69,7 +75,7 @@ size_t __strlen(const char *s)
 //! \param size    Number of elements to be compared
 //! \return        Returns true if both char arrays are equal on their first `size` elements.
 //! In short, __memeq(s1, s2, n) <-> !memcmp(s1, s2, n)
-bool __memeq(char * str1, char * str2, size_t size)
+static bool __memeq(char * str1, char * str2, size_t size)
 {
     if (size)
     {
@@ -93,7 +99,7 @@ bool __memeq(char * str1, char * str2, size_t size)
 //! \return         Returns NULL if `find` is not a substring of `str`.
 //! This function does *not* verify if __strlen(find) > __strlen(str).
 //!
-char * __strstr(char * str, char *find)
+static char * __strstr(char * str, char *find)
 {
     char c = *find++;
     if (c != '\0')
@@ -123,7 +129,7 @@ char * __strstr(char * str, char *find)
 //! Based on a version of strtok by Chris Dodd.
 //! Update: this should be reentrant/safer now.
 //! Note: this *will* modify `str`. Duplicate the string before usage.
-char * __strtok(char *str, char *delim, char ** prev)
+static char * __strtok(char *str, char *delim, char ** prev)
 {
     if (!str)
     {
@@ -151,7 +157,7 @@ char * __strtok(char *str, char *delim, char ** prev)
 //! \param n         The quantity of elements to be copied.
 //! \return          Returns the destination char array.
 //!
-char * __memcpy(char * dest, const char *src, size_t n) {
+static LIBSTRING_INLINE char * __memcpy(char * dest, const char *src, size_t n) {
    while (n--)
    {
        *dest++ = *src++;
@@ -165,8 +171,13 @@ char * __memcpy(char * dest, const char *src, size_t n) {
 //! \param src       Source char array.
 //! \param size      Quantitity of elements to be copied. It may be larger than __strlen(src), but the function will not write more than __strlen(src).
 //!
-size_t __strcpy(char *dest, const char *src, size_t size)
+static size_t __strcpy(char *dest, const char *src, size_t size)
 {
+    if (!dest || !src)
+    {
+        return 0;
+    }
+
     if(!size)
     {
         fprintf(stderr, "In __strcpy: `size` should not be 0.\n");
@@ -189,7 +200,7 @@ size_t __strcpy(char *dest, const char *src, size_t size)
     return source_len;
 }
 
-size_t __strncat(char *dest, const char *src, size_t size)
+static size_t __strncat(char *dest, const char *src, size_t size)
 {
     size_t dest_len = __strlen(dest);
     if (dest_len < size)
@@ -205,7 +216,7 @@ size_t __strncat(char *dest, const char *src, size_t size)
 //! \param y The other element to be compared.
 //! \return The lesser element.
 //!
-size_t __cstr_min(size_t x, size_t y)
+static LIBSTRING_INLINE size_t __cstr_min(size_t x, size_t y)
 {
     if (x < y)
         return x;
@@ -219,13 +230,13 @@ size_t __cstr_min(size_t x, size_t y)
 //! \param y The other element to be compared.
 //! \return The greater element.
 //!
-size_t __cstr_max(size_t x, size_t y)
-{
-    if (x > y)
-        return x;
-    else
-        return y;
-}
+//static size_t __cstr_max(size_t x, size_t y)
+//{
+//    if (x > y)
+//        return x;
+//    else
+//        return y;
+//}
 
 /*!
  * \struct alloc_node A single node of the allocation linked list.
@@ -291,7 +302,7 @@ void string_free_all (void)
     alloc_list_head = NULL;
 }
 
-char * __strtok_wrapper(char *str, char *delim)
+static char * __strtok_wrapper(char *str, char *delim)
 {
     static char *last;
     return __strtok(str, delim, &last);
@@ -316,12 +327,12 @@ bool sanity_check(cstr_t * str)
     return true;
 }
 
-char * string_first_token(char * str, char * delim)
+LIBSTRING_INLINE char * string_first_token(char * str, char * delim)
 {
     return __strtok_wrapper(str, delim);
 }
 
-char * string_get_token(char * delim)
+LIBSTRING_INLINE char * string_get_token(char * delim)
 {
     return __strtok_wrapper(NULL, delim);
 }
@@ -411,7 +422,7 @@ char * __strcat(char *dst, const char *src)
 }
 
 // TODO: change to use __strcpy
-char * __strlcpy(char *dst, const char *src)
+static char * __strlcpy(char *dst, const char *src)
 {
     char *save = dst;
     for (; (*dst = *src) != '\0'; ++src, ++dst);
@@ -729,7 +740,9 @@ cstr_t * string_mid(cstr_t *str, size_t pos, long length)
     }
 
     if (str->size <= pos || str->size == 0 || (length < 1 && length != -1))
+    {
         return string_init("");
+    }
 
     size_t stop_element;
 
@@ -752,7 +765,7 @@ cstr_t * string_mid(cstr_t *str, size_t pos, long length)
 //! \param length Amount of characters desired.
 //! \return Generated substring.
 //!
-cstr_t * string_left(cstr_t *str, long length)
+LIBSTRING_INLINE cstr_t * string_left(cstr_t *str, long length)
 {
     return string_mid(str, 0, (long) length);
 }
